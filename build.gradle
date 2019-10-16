@@ -1,0 +1,69 @@
+plugins {
+    id 'java'
+    id 'io.qameta.allure' version '2.8.1'
+}
+
+group 'com.phystem'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+def cucumberVersion = '4.7.4'
+def junitVersion = '5.5.0'
+def allureVersion = '2.8.1'
+def allurePluginVersion = '2.13.0'
+def selenideVersion = '5.3.1'
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+    testImplementation "io.cucumber:cucumber-java8:${cucumberVersion}"
+    testImplementation "io.cucumber:cucumber-junit:${cucumberVersion}"
+    testImplementation "io.qameta.allure:allure-cucumber4-jvm:${allurePluginVersion}"
+
+    implementation "com.codeborne:selenide:${selenideVersion}"
+    implementation "io.qameta.allure:allure-selenide:${allurePluginVersion}"
+
+
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+    testRuntimeOnly "org.junit.vintage:junit-vintage-engine:${junitVersion}"
+}
+
+test {
+    useJUnitPlatform()
+}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
+}
+
+
+task cucumber() {
+    dependsOn assemble, compileTestJava
+    doLast {
+        javaexec {
+            systemProperty("allure.results.directory", "build/allure-results")
+
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = ['--plugin', 'pretty',
+                    '--plugin', 'io.qameta.allure.cucumber4jvm.AllureCucumber4Jvm',
+                    '--glue',
+                    'stepdefs', 'src/test/resources']
+        }
+    }
+}
+
+allure {
+    version = allureVersion
+    autoconfigure = true
+    aspectjweaver = true
+}
+
+cucumber.finalizedBy 'allureReport'
