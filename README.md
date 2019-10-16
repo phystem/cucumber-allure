@@ -13,15 +13,20 @@ After the features are ran, you can see the allure results under `build/reports/
 
 ## Libraries Used
 
-Cucumber - 4.7.4
-Selenide - 5.3.1
-Allure - 2.8.1
-Junit - 5.5.0
+[Cucumber](https://cucumber.io/docs) - 4.7.4
+
+[Selenide](https://selenide.org/) - 5.3.1
+
+[Allure](http://allure.qatools.ru/) - 2.8.1
+
+[Junit](https://junit.org/junit5/docs/current/user-guide/) - 5.5.0
 
 Cucumber syntax is based on cucumber java-8 model
 
 
 ## References
+
+https://github.com/cucumber/cucumber-eclipse/wiki/Lambda-Expression-support-for-Cucumber-Java8
 
 https://cucumber.io/docs/guides/10-minute-tutorial/
 
